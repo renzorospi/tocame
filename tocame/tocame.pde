@@ -1,15 +1,12 @@
 import processing.sound.*;
 import processing.video.*;
 
-int timer = 0;
-int tiempoInicial;
-
 Movie vid;
+float timer = 0;
+int tiempoInicial;
 boolean playing = false;
 boolean perdio = false;
-String texto = "";
-String soltar = "";
-String ganaste = "";
+String texto = "tócame";
 String créditos = "Concepto, programación, animación y música: Renzo Rospigliosi";
 String web = "renzorospigliosi.com";
 
@@ -29,70 +26,60 @@ void draw() {
   fill(0);
   textFont(createFont("Consolas", 40));
 
-  // Verifica si el jugador mantiene presionado el mouse y el temporizador llega a 60
-  if (mousePressed && timer > 60) {
-    ganaste = "sabía que no me dejarías ir";
-    text(ganaste, width / 2, height / 2);
-    soltar = "";
-    texto = "";
-    textSize(20);
-    text(créditos, width / 2, height - 40);
-    textSize(10);
-    text(web, width / 2, height - 20);
-  } else if (!perdio && timer < 61) {
-    soltar = "";
-    ganaste = "";
-    texto = "tócame";
-    text(texto, width / 2, height / 6);
-  } else {
-    soltar = "qué fácil fue soltarme";
-    ganaste = "";
-    texto = "";
-    text(soltar, width / 2, height / 2);
-    textSize(15);
-    text(créditos, width / 2, height - 40);
-    textSize(10);
-    text(web, width / 2, height - 20);
-  }
-
   if (playing && timer < 61) {
     image(vid, width / 2, height / 2, width / 2, height / 2);
     timer = (millis() - tiempoInicial) / 1000;
     text(floor(timer), width / 2 + 270, height / 6);
+    mostrarTexto("no te alejes", height / 6);
+  } else {
+    if (!playing && !perdio) {
+      mostrarTexto("tócame", height / 6);
+    } else if (playing && timer > 60) {
+      mostrarTexto("sabía que no me dejarías ir", height / 2);
+      mostrarTexto(créditos, height - 40, 15);
+      mostrarTexto(web, height - 20, 10);
+    } else if (!playing && perdio) {
+      mostrarTexto("qué fácil fue soltarme", height / 2);
+      mostrarTexto(créditos, height - 40, 15);
+      mostrarTexto(web, height - 20, 10);
+    }
   }
 }
 
 void mousePressed() {
-  vid.play();
-  playing = true;
-  texto = "no me sueltes";
-  tiempoInicial = millis();
-
-  // Para resetear el sketch si se cumple alguna de las condiciones
-  if (perdio || timer > 60) {
-    perdio = false;
-    timer = 0;
+  if (!playing) {
+    vid.play();
+    playing = true;
+    texto = "no me sueltes";
     tiempoInicial = millis();
+  } else {
+    // Para resetear el sketch si se cumple alguna de las condiciones
+    if (perdio || timer > 60) {
+      perdio = false;
+      timer = 0;
+      tiempoInicial = millis();
+    }
   }
 }
 
 void mouseReleased() {
-  vid.stop();
-  playing = false;
-  tiempoInicial = 0;
-  texto = "";
-  perdio = true;
+  if (playing) {
+    vid.stop();
+    playing = false;
+    tiempoInicial = 0;
+    perdio = true;
+  }
 }
 
-void movieEvent(Movie m) {
-  m.read();
+void mostrarTexto(String txt, float posY, float size) {
+  textSize(size);
+  text(txt, width / 2, posY);
 }
 
-void settings() {
-  fullScreen();
+void mostrarTexto(String txt, float posY) {
+  mostrarTexto(txt, posY, 40);
 }
 
-void stop() {
-  vid.stop();
-  super.stop();
+void windowResized() {
+  size(displayWidth, displayHeight);
 }
