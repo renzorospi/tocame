@@ -4,9 +4,9 @@ let tiempoInicial;
 let vid;
 let playing = false;
 let perdio = false;
-let texto = "tócame";
-let soltar = "qué fácil fue soltarme";
-let ganaste = "sabía que no me dejarías ir";
+let texto = "";
+let soltar = "";
+let ganaste = "";
 let créditos = "Concepto, programación, animación y música: Renzo Rospigliosi";
 let web = "renzorospigliosi.com";
 
@@ -31,15 +31,23 @@ function draw() {
 
   // Verifica si el jugador mantiene presionado el mouse y el temporizador llega a 60
   if (mouseIsPressed && timer > 60) {
+    ganaste = "sabía que no me dejarías ir"
     text(ganaste, width / 2, height / 2);
     soltar = "";
+    texto = "";
     textSize(20);
     text(créditos, width / 2, height - 40);
     textSize(10);
     text(web, width / 2, height - 20);
   } else if (!perdio && timer < 61) {
+    soltar = "";
+    ganaste = "";
+    texto = "tócame"
     text(texto, width / 2, height / 6);
   } else {
+    soltar = "qué fácil fue soltarme"
+    ganaste = "";
+    texto = "";
     text(soltar, width / 2, height / 2);
     textSize(15);
     text(créditos, width / 2, height - 40);
