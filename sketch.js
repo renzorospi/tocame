@@ -29,7 +29,15 @@ function draw() {
   fill(0);
   textFont("Consolas");
 
-  if (!perdio && timer < 61) {
+  // Verifica si el jugador mantiene presionado el mouse y el temporizador llega a 60
+  if (mouseIsPressed && timer > 60) {
+    text(ganaste, width / 2, height / 2);
+    soltar = "";
+    textSize(20);
+    text(créditos, width / 2, height - 40);
+    textSize(10);
+    text(web, width / 2, height - 20);
+  } else if (!perdio && timer < 61) {
     text(texto, width / 2, height / 6);
   } else {
     text(soltar, width / 2, height / 2);
@@ -43,15 +51,6 @@ function draw() {
     image(vid, width / 2, height / 2, width / 2, height / 2);
     timer = (millis() - tiempoInicial) / 1000;
     text(floor(timer), width / 2 + 270, height / 6);
-  }
-
-  if (timer > 60) {
-    text(ganaste, width / 2, height / 2);
-    soltar = "";
-    textSize(20);
-    text(créditos, width / 2, height - 40);
-    textSize(10);
-    text(web, width / 2, height - 20);
   }
 }
 
